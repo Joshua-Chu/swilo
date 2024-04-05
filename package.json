@@ -9,8 +9,8 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@swilo/eslint-config": "workspace:*",
+    "@swilo/typescript-config": "workspace:*",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",
