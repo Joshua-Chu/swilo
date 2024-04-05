@@ -11,6 +11,8 @@
   "devDependencies": {
     "@swilo/eslint-config": "workspace:*",
     "@swilo/typescript-config": "workspace:*",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.28.1",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5",

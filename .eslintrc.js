@@ -4,7 +4,20 @@ module.exports = {
   ignorePatterns: ["www/**", "packages/**"],
   extends: ["@swilo/eslint-config/library.js"],
   parser: "@typescript-eslint/parser",
+  plugins: ["import"],
   parserOptions: {
     project: true,
+  },
+  rules: {
+    // turn on errors for missing imports
+    "import/no-unresolved": "error",
+  },
+  settings: {
+    "import/resolver": {
+      typescript: {
+        alwaysTryTypes: true,
+        project: "packages/*/tsconfig.json",
+      },
+    },
   },
 };

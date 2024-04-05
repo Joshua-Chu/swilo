@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1712507717038,
+      "tag": "0000_good_johnny_blaze",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1712507870087,
+      "tag": "0001_polite_anthem",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1712507908265,
+      "tag": "0002_thick_lockheed",
+      "breakpoints": true
+    }
+  ]
+}
