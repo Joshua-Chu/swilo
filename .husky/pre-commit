@@ -1,1 +1,2 @@
 pnpm dlx lint-staged
+cd packages/swilo && pnpm exec vitest --run
