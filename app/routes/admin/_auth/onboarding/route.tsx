@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { adminAuthSessionStorage } from "@/lib/auth/admin-session.server";
 import { verificationSessionStorage } from "@/lib/verification-session.server";
-import { signUp } from "@/services/auth.server";
+import { adminSignup } from "@/services/auth.server";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { getZodConstraint, parseWithZod } from "@conform-to/zod";
 import {
@@ -76,7 +76,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const submission = await parseWithZod(formData, {
     schema: adminOnboardingSchema.transform(async (data) => {
-      const session = await signUp({
+      const session = await adminSignup({
         email: verificationEmail,
         password: data.password,
         firstName: data.firstName,

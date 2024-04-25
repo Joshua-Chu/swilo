@@ -39,7 +39,7 @@ export const InputField = ({
   const id = inputProps.id ?? fallbackId;
   const errorId = errors?.length ? `${id}-error` : undefined;
   return (
-    <div className={className}>
+    <div className={`${className} mb-2`}>
       <Label htmlFor={id} {...labelProps} />
       <Input
         id={id}
@@ -47,7 +47,7 @@ export const InputField = ({
         aria-describedby={errorId}
         {...inputProps}
       />
-      <div className="h-4 pb-3 pt-2">
+      <div className="h-5 pb-3 pt-1">
         {errorId ? <ErrorList id={errorId} errors={errors} /> : null}
       </div>
     </div>
