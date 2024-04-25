@@ -21,7 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
-import { Link } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 
 export const Header = () => {
   return (
@@ -105,7 +105,11 @@ export const Header = () => {
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem>Support</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem>
+            <Form action="/admin/logout" method="POST">
+              <button>Logout</button>
+            </Form>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>
