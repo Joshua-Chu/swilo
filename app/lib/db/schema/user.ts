@@ -1,4 +1,5 @@
 import { password } from "@/lib/db/schema/password";
+import { role } from "@/lib/db/schema/role";
 import { session } from "@/lib/db/schema/session";
 import { createId } from "@paralleldrive/cuid2";
 import { relations } from "drizzle-orm";
@@ -11,6 +12,7 @@ export const user = pgTable("user", {
   email: text("email").unique().notNull(),
   firstName: text("firstName").notNull(),
   lastName: text("lastName").notNull(),
+  role: text("role").references(() => role.name),
 });
 
 export const userRelations = relations(user, ({ one, many }) => ({

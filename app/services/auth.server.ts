@@ -95,7 +95,7 @@ export const adminSignup = async ({
   const session = await db.transaction(async (tx) => {
     const user = await tx
       .insert(userSchema)
-      .values({ firstName, lastName, email })
+      .values({ firstName, lastName, email, role: "ADMIN" })
       .returning({ userId: userSchema.id });
 
     const userId = user[0].userId;

@@ -27,7 +27,10 @@ const PasswordSchema = z
   .max(100, { message: "Password is too long" });
 
 const PasswordAndConfirmPasswordSchema = z
-  .object({ password: PasswordSchema, confirmPassword: PasswordSchema })
+  .object({
+    password: PasswordSchema,
+    confirmPassword: z.string({ required_error: "Password is required" }),
+  })
   .superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {
       ctx.addIssue({

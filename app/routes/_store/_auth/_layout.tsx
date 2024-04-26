@@ -1,9 +1,8 @@
 import { Outlet } from "@remix-run/react";
 
-export default function CustomerAuthLayout() {
+export default function AdminAuthLayout() {
   return (
-    <div>
-      Customer Auth Layout
+    <div className="flex w-full h-screen justify-center items-center">
       <Outlet />
     </div>
   );
