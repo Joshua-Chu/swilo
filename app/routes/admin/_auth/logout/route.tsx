@@ -1,4 +1,4 @@
-import { adminAuthSessionStorage } from "@/lib/auth/admin-session.server";
+import { authSessionStorage } from "@/lib/auth/auth-session.server";
 import { db } from "@/lib/db";
 import { session } from "@/lib/db/schema/session";
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
@@ -9,11 +9,11 @@ export const loader = () => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const adminAuthSession = await adminAuthSessionStorage.getSession(
+  const authSession = await authSessionStorage.getSession(
     request.headers.get("cookie")
   );
 
-  const sessionId = adminAuthSession.get("sessionId");
+  const sessionId = authSession.get("sessionId");
 
   if (sessionId) {
     await db.delete(session).where(eq(session.id, sessionId));
@@ -21,9 +21,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   return redirect("/admin/login", {
     headers: {
-      "set-cookie": await adminAuthSessionStorage.destroySession(
-        adminAuthSession
-      ),
+      "set-cookie": await authSessionStorage.destroySession(authSession),
     },
   });
 };

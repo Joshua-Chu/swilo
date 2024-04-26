@@ -1,6 +1,6 @@
 import { createCookieSessionStorage } from "@remix-run/node";
 
-export const adminAuthSessionStorage = createCookieSessionStorage({
+export const authSessionStorage = createCookieSessionStorage({
   cookie: {
     name: "swilo-admin-auth",
     sameSite: "lax",

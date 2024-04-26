@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { authSessionStorage } from "@/lib/auth/auth-session.server";
 import { verificationSessionStorage } from "@/lib/verification-session.server";
-import { adminSignup } from "@/services/auth.server";
+import { customerSignup } from "@/services/auth.server";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { getZodConstraint, parseWithZod } from "@conform-to/zod";
 import {
@@ -41,7 +41,7 @@ const PasswordAndConfirmPasswordSchema = z
     }
   });
 
-const adminOnboardingSchema = z
+const customerOnboardingSchema = z
   .object({
     firstName: z
       .string({ required_error: "Must not be empty" })
@@ -60,7 +60,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   );
 
   const verificationEmail = verificationSession.get("target");
-  if (!verificationEmail) return redirect("/admin/signup");
+  if (!verificationEmail) return redirect("/signup");
 
   return json({
     email: verificationEmail,
@@ -73,13 +73,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   );
 
   const verificationEmail = verificationSession.get("target");
-  if (!verificationEmail) return redirect("/admin/signup");
+  if (!verificationEmail) return redirect("/signup");
 
   const formData = await request.formData();
 
   const submission = await parseWithZod(formData, {
-    schema: adminOnboardingSchema.transform(async (data) => {
-      const session = await adminSignup({
+    schema: customerOnboardingSchema.transform(async (data) => {
+      const session = await customerSignup({
         email: verificationEmail,
         password: data.password,
         firstName: data.firstName,
@@ -118,27 +118,27 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     await verificationSessionStorage.destroySession(verificationSession)
   );
 
-  return redirect("/admin/dashboard", { headers });
+  return redirect("/", { headers });
 };
 
-export default function AdminOnboarding() {
+export default function CustomerOnboarding() {
   // const loaderData = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const [form, fields] = useForm({
-    id: "admin-onboarding-form",
+    id: "customer-onboarding-form",
     lastResult: actionData?.result,
-    constraint: getZodConstraint(adminOnboardingSchema),
+    constraint: getZodConstraint(customerOnboardingSchema),
     shouldValidate: "onBlur",
     shouldRevalidate: "onInput",
     onValidate: ({ formData }) => {
-      return parseWithZod(formData, { schema: adminOnboardingSchema });
+      return parseWithZod(formData, { schema: customerOnboardingSchema });
     },
   });
 
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle className="text-xl">Admin Onboarding</CardTitle>
+        <CardTitle className="text-xl">Customer Onboarding</CardTitle>
         <CardDescription>
           Please fill out the information needed to create an account
         </CardDescription>

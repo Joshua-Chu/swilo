@@ -81,14 +81,25 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     type,
   });
 
+  const verificationSession = await verificationSessionStorage.getSession();
+  verificationSession.set("target", target);
+
   switch (type) {
     case "admin-onboarding": {
-      const verificationSession = await verificationSessionStorage.getSession();
-      verificationSession.set("target", target);
       return redirect("/admin/onboarding", {
         headers: {
-          "set-cookie":
-            await verificationSessionStorage.commitSession(verificationSession),
+          "set-cookie": await verificationSessionStorage.commitSession(
+            verificationSession
+          ),
+        },
+      });
+    }
+    case "customer-onboarding": {
+      return redirect("/onboarding", {
+        headers: {
+          "set-cookie": await verificationSessionStorage.commitSession(
+            verificationSession
+          ),
         },
       });
     }

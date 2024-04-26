@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { verification } from "@/lib/db/schema/verification";
 import { generateTOTP } from "@epic-web/totp";
 
-export type VerificationTypes = "admin-onboarding";
+export type VerificationTypes = "admin-onboarding" | "customer-onboarding";
 
 const getDomainUrl = (request: Request) => {
   const host =

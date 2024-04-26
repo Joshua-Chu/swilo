@@ -7,8 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { adminAuthSessionStorage } from "@/lib/auth/admin-session.server";
-import { adminLogin } from "@/services/auth.server";
+import { authSessionStorage } from "@/lib/auth/auth-session.server";
+import { login } from "@/services/auth.server";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { getZodConstraint, parseWithZod } from "@conform-to/zod";
 import {
@@ -31,10 +31,10 @@ const adminLoginSchema = z.object({
 });
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const adminAuthSession = await adminAuthSessionStorage.getSession(
+  const authSession = await authSessionStorage.getSession(
     request.headers.get("cookie")
   );
-  const sessionId = adminAuthSession.get("sessionId");
+  const sessionId = authSession.get("sessionId");
   if (sessionId) return redirect("/admin/dashboard");
 
   return null;
@@ -44,7 +44,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const submission = await parseWithZod(formData, {
     schema: adminLoginSchema.transform(async (data, ctx) => {
-      const session = await adminLogin({ ...data });
+      const session = await login({ ...data });
       if (!session) {
         ctx.addIssue({
           path: ["password"],
@@ -73,20 +73,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const { sessionId, sessionExpirationDate } = submission.value.session;
 
-  const adminAuthSession = await adminAuthSessionStorage.getSession(
+  const authSession = await authSessionStorage.getSession(
     request.headers.get("cookie")
   );
 
-  adminAuthSession.set("sessionId", sessionId);
+  authSession.set("sessionId", sessionId);
 
   return redirect("/admin/dashboard", {
     headers: {
-      "set-cookie": await adminAuthSessionStorage.commitSession(
-        adminAuthSession,
-        {
-          expires: sessionExpirationDate,
-        }
-      ),
+      "set-cookie": await authSessionStorage.commitSession(authSession, {
+        expires: sessionExpirationDate,
+      }),
     },
   });
 };

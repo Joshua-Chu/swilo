@@ -49,7 +49,7 @@ const verifyAdminPassword = async ({
   return { userId: adminUserId };
 };
 
-export const adminLogin = async ({
+export const login = async ({
   email,
   password,
 }: {
@@ -96,6 +96,48 @@ export const adminSignup = async ({
     const user = await tx
       .insert(userSchema)
       .values({ firstName, lastName, email, role: "ADMIN" })
+      .returning({ userId: userSchema.id });
+
+    const userId = user[0].userId;
+
+    await tx.insert(passwordSchema).values({
+      hashedPassword,
+      userId,
+    });
+
+    const session = await tx
+      .insert(sessionSchema)
+      .values({
+        userId,
+        expirationDate: getSessionExpirationDate(),
+      })
+      .returning({
+        sessionId: sessionSchema.id,
+        sessionExpirationDate: sessionSchema.expirationDate,
+      });
+
+    return session[0];
+  });
+
+  return session;
+};
+
+export const customerSignup = async ({
+  firstName,
+  lastName,
+  password,
+  email,
+}: {
+  firstName: string;
+  lastName: string;
+  password: string;
+  email: string;
+}) => {
+  const hashedPassword = await getPasswordHash(password);
+  const session = await db.transaction(async (tx) => {
+    const user = await tx
+      .insert(userSchema)
+      .values({ firstName, lastName, email, role: "CUSTOMER" })
       .returning({ userId: userSchema.id });
 
     const userId = user[0].userId;
